@@ -49,6 +49,7 @@ class SelfCModel(BaseModel):
 		# print network
 		self.print_network()
 		self.load()
+		torch.cuda.memory_summary(device=self.device, abbreviated=False)
 
 		# self.Quantization = Quantization()
 		self.Reconstruction_back = ReconstructionLoss(losstype="l1")
@@ -99,7 +100,7 @@ class SelfCModel(BaseModel):
 			self.log_dict = OrderedDict()
 
 	def feed_data(self, data):
-		self.real_H = data['GT']  # GT
+		self.real_H = data['GT'].half()  # GT
 		
 		if "LQ" in data:
 			self.ref_L = data['LQ']  # GT
@@ -115,7 +116,9 @@ class SelfCModel(BaseModel):
 			if self.opt["distortion"] == "pytorch_bicubic":
 				self.ref_L = F.upsample(self.real_H,scale_factor=(1/self.opt['scale'],1/self.opt['scale']),mode='area')
 			if self.opt["distortion"] == "sr_bd":
-				self.ref_L = Guassian_downsample(self.real_H.transpose(0,1),scale=2).transpose(0,1)
+				with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+					self.ref_L = Guassian_downsample(self.real_H.transpose(0,1),scale=2).transpose(0,1)
+				self.ref_L = self.ref_L.half()
 	   
 	def gaussian_batch(self, dims):
 		return torch.randn(tuple(dims)).to(self.device)
@@ -200,12 +203,12 @@ class SelfCModel(BaseModel):
 			T2 = time.time()
 			print('down time %s ms' % ((T2 - T1)*1000))
 			# self.forw_L = self.Quantization(self.forw_L)
-			T1 = time.time()
-			x_samples = self.netG(x=LR_codec_recons, rev=True)
+			# T1 = time.time()
+			# x_samples = self.netG(x=LR_codec_recons, rev=True)
 
-			T2 = time.time()
-			print('up time %s ms' % ((T2 - T1)*1000))
-			self.fake_H = x_samples[:, :3, :, :]
+			# T2 = time.time()
+			# print('up time %s ms' % ((T2 - T1)*1000))
+			# self.fake_H = x_samples[:, :3, :, :]
 
 			# l_forw_fit = self.loss_forward(self.output[:, :3, :, :], LR_ref)
 			# print(self.real_H.device,  self.fake_H.device)

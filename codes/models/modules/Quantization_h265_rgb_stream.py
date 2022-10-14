@@ -95,6 +95,7 @@ class Quantization_H265_Stream:
         },
         outputdict = out_dict,verbosity = 1)
     def write_multi_frames(self,input):
+        input = input.float()
         input = torch.clamp(input, 0.0, 1.0)
         output = (input * 255.0).round()### b c h w 
         bt,c,h,w =output.size()

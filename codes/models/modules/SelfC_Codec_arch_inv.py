@@ -504,7 +504,7 @@ class SelfCInvNet(nn.Module):
 		out = x.cpu()
 		jacobian = 0
 		#### if training clip length changed,please reset this value:Seg_Len
-		Seg_Len = 3
+		Seg_Len = 1
 		divide_width_num = 2
 		divide_height_num = 2
 		if not rev:

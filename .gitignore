@@ -19,6 +19,7 @@ tb_logger/*
 *.mat
 *.npy
 *.pth
+*.mkv
 
 # latex
 *.aux

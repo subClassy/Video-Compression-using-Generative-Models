@@ -22,7 +22,7 @@ def create_dataloader(dataset, dataset_opt, opt=None, sampler=None):
                                            pin_memory=False)
     else:
         batch_size = dataset_opt['batch_size']
-        return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=8, drop_last=False,
+        return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=False,
                                            pin_memory=False)
 
 
