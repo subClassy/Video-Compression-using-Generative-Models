@@ -44,8 +44,8 @@ class Quantization_H265_Stream:
         self.video_frame_num = 0
 
     def open_writer(self,dev_id,w,h ):
-        if not Quantization_H265_Stream.file_random_name:
-            Quantization_H265_Stream.file_random_name = str(time.time())
+        # if not Quantization_H265_Stream.file_random_name:
+        Quantization_H265_Stream.file_random_name = str(time.time())
         self.w = w
         self.h = h
         self.video_frame_num = 0
@@ -95,7 +95,7 @@ class Quantization_H265_Stream:
         },
         outputdict = out_dict,verbosity = 1)
     def write_multi_frames(self,input):
-        input = input.float()
+        # input = input.float()
         input = torch.clamp(input, 0.0, 1.0)
         output = (input * 255.0).round()### b c h w 
         bt,c,h,w =output.size()

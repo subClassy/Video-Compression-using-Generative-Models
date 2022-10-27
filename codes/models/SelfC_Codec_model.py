@@ -15,6 +15,7 @@ import models.lr_scheduler as lr_scheduler
 from .base_model import BaseModel
 from models.modules.loss import ReconstructionLoss
 import utils.util as util
+import GPUtil
 
 logger = logging.getLogger('base')
 
@@ -194,6 +195,7 @@ class SelfCModel(BaseModel):
 		with torch.no_grad():
 			import time
 			T1 = time.time()
+			self.netG = self.netG.half()
 			self.forw_L,LR_codec_recons,loss_c,distortion_loss,video_bpp\
 			,mimick_loss,img_bpp= self.netG(x=self.input, rev=False)
 			self.mimick_loss = mimick_loss
@@ -203,12 +205,13 @@ class SelfCModel(BaseModel):
 			T2 = time.time()
 			print('down time %s ms' % ((T2 - T1)*1000))
 			# self.forw_L = self.Quantization(self.forw_L)
-			# T1 = time.time()
-			# x_samples = self.netG(x=LR_codec_recons, rev=True)
+			self.netG = self.netG.float()
+			T1 = time.time()
+			x_samples = self.netG(x=LR_codec_recons, rev=True)
 
-			# T2 = time.time()
-			# print('up time %s ms' % ((T2 - T1)*1000))
-			# self.fake_H = x_samples[:, :3, :, :]
+			T2 = time.time()
+			print('up time %s ms' % ((T2 - T1)*1000))
+			self.fake_H = x_samples[:, :3, :, :]
 
 			# l_forw_fit = self.loss_forward(self.output[:, :3, :, :], LR_ref)
 			# print(self.real_H.device,  self.fake_H.device)

@@ -5,6 +5,8 @@ import argparse
 from collections import OrderedDict
 
 import numpy as np
+from models.modules.Quantization_h265_rgb_stream import Quantization_H265_Stream
+from test_quantization import h265_compress
 import options.options as option
 import utils.util as util
 from data.util import bgr2ycbcr
@@ -82,6 +84,10 @@ for test_loader in test_loaders:
 
 
         model.test()
+
+        quantization_H265_Stream = Quantization_H265_Stream(9, -1, 2, opt)
+        regenerate_h265, gt_h265, bpp_h265 = h265_compress(data, quantization_H265_Stream)
+        
         visuals = model.get_current_visuals()
         metrices = model.get_current_metrics()
         video_distor_loss = metrices["video_distor_loss"]
@@ -103,44 +109,58 @@ for test_loader in test_loaders:
         # lr_img = util.tensor2img(visuals['LR'])  # uint8
         # lrgt_img = util.tensor2img(visuals['LR_ref'])  # uint8
 
-        sr_img = (visuals['SR'])
-        srgt_img = (visuals['GT']) 
-        lr_img = (visuals['LR'])  
-        lrgt_img = (visuals['LR_ref']) 
+        sr_img = (visuals['SR'].float())
+        srgt_img = (visuals['GT'].float()) 
+        lr_img = (visuals['LR'].float())  
+        lrgt_img = (visuals['LR_ref'].float()) 
         
         # save images
         suffix = opt['suffix']
-        if suffix:
-            save_img_path = osp.join(dataset_dir, img_name + suffix + '.jpg')
-        else:
-            save_img_path = osp.join(dataset_dir, img_name + '.jpg')
-        if is_save_image:
-            util.save_img(util.tensor2img(sr_img), save_img_path)
 
-        if suffix:
-            save_img_path = osp.join(dataset_dir, img_name + suffix + '_GT.jpg')
-        else:
-            save_img_path = osp.join(dataset_dir, img_name + '_GT.jpg')
         if is_save_image:
-            util.save_img(util.tensor2img(srgt_img), save_img_path)
+            no_of_images = gt_h265.shape[0]
+            for img_no in range(no_of_images // 5):
+                if suffix:
+                    save_img_path = osp.join(dataset_dir, img_name + suffix + f'_{img_no}.jpg')
+                else:
+                    save_img_path = osp.join(dataset_dir, img_name + f'_{img_no}.jpg')
+                gt = gt_h265[img_no*5]
+                h265_recon = regenerate_h265[img_no*5]
+                selfc_recon = regenerate_h265[img_no*5]
+                output = torch.stack([gt, selfc_recon, gt, h265_recon], 0)
+                util.save_img(util.tensor2img(output), save_img_path)
 
-        if suffix:
-            save_img_path = osp.join(dataset_dir, img_name + suffix + '_LR.jpg')
-        else:
-            save_img_path = osp.join(dataset_dir, img_name + '_LR.jpg')
-        if is_save_image:
-            util.save_img(util.tensor2img(lr_img), save_img_path)
+        # if suffix:
+        #     save_img_path = osp.join(dataset_dir, img_name + suffix + '.jpg')
+        # else:
+        #     save_img_path = osp.join(dataset_dir, img_name + '.jpg')
+        # if is_save_image:
+        #     util.save_img(util.tensor2img(sr_img), save_img_path)
 
-        if suffix:
-            save_img_path = osp.join(dataset_dir, img_name + suffix + '_LR_ref.jpg')
-        else:
-            save_img_path = osp.join(dataset_dir, img_name + '_LR_ref.jpg')
-        if is_save_image:
-            util.save_img(util.tensor2img(lrgt_img), save_img_path)
+        # if suffix:
+        #     save_img_path = osp.join(dataset_dir, img_name + suffix + '_GT.jpg')
+        # else:
+        #     save_img_path = osp.join(dataset_dir, img_name + '_GT.jpg')
+        # if is_save_image:
+        #     util.save_img(util.tensor2img(srgt_img), save_img_path)
+
+        # if suffix:
+        #     save_img_path = osp.join(dataset_dir, img_name + suffix + '_LR.jpg')
+        # else:
+        #     save_img_path = osp.join(dataset_dir, img_name + '_LR.jpg')
+        # if is_save_image:
+        #     util.save_img(util.tensor2img(lr_img), save_img_path)
+
+        # if suffix:
+        #     save_img_path = osp.join(dataset_dir, img_name + suffix + '_LR_ref.jpg')
+        # else:
+        #     save_img_path = osp.join(dataset_dir, img_name + '_LR_ref.jpg')
+        # if is_save_image:
+        #     util.save_img(util.tensor2img(lrgt_img), save_img_path)
 
         # calculate PSNR and SSIM
         # gt_img = util.tensor2img()
-        gt_img = visuals['GT']
+        gt_img = visuals['GT'].float()
 
         # gt_img = gt_img / 255.
         # sr_img = sr_img / 255.

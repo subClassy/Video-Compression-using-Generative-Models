@@ -64,7 +64,7 @@ def _get_paths_from_vids(dataroot,data_list,max_size):
         dir_path = os.path.join(dataroot,vid_path.strip())
         img_num = len(os.listdir(dir_path))
         # exit()
-        vid_img_list = [ os.path.join(dataroot,vid_path.strip(),"im"+str(i))+".png" for i in range(1,img_num+1)]
+        vid_img_list = [ os.path.join(dataroot,vid_path.strip(),"im"+str(i))+".jpg" for i in range(1,img_num+1)]
         images += [vid_img_list]
     return images
 

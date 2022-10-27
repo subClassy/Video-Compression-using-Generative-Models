@@ -104,8 +104,8 @@ class BaseModel():
         #     if "operations" in k:
         #         load_net_clean[k.replace("operations","operations")] = v
         # print(load_net_clean.keys())
-        network.load_state_dict(load_net_clean, strict=False)
-        network.half()
+        network.load_state_dict(load_net_clean, strict=True)
+        # network.half()
     def save_training_state(self, epoch, iter_step):
         '''Saves training state during training, which will be used for resuming'''
         state = {'epoch': epoch, 'iter': iter_step, 'schedulers': [], 'optimizers': []}

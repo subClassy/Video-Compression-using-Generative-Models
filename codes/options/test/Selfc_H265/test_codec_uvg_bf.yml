@@ -15,13 +15,20 @@ datasets:
   #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_beauty/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
   #   video_len: 100
   #   batch_size: 1
-  test_2:  # the 1st test dataset
-    name: selfc_bosphorus
+  test_1:  # the 1st test dataset
+    name: selfc_mm
     mode: LQGTVID
-    dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_bosphorus   # path to validation HR images
-    dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_bosphorus/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
-    video_len: 100
+    dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm   # path to validation HR images
+    dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    video_len: 40
     batch_size: 1
+  # test_2:  # the 1st test dataset
+  #   name: selfc_bosphorus
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_bosphorus   # path to validation HR images
+  #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_bosphorus/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 100
+  #   batch_size: 1
   # test_3:  # the 1st test dataset
   #   name: selfc_honeybee
   #   mode: LQGTVID

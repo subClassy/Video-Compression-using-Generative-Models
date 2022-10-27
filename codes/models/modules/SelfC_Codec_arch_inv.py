@@ -382,7 +382,7 @@ class SelfCInvNet(nn.Module):
 		operations = []
 		current_channel = channel_in
 		subnet_constructor = subnet(subnet_type,"xavier")
-		b = FrequencyAnalyzer(current_channel,2)
+		b = FrequencyAnalyzer(current_channel, 2)
 		operations.append(b)
 		current_channel *= (2**2+1)
 		# print("down_num",down_num)
@@ -567,6 +567,7 @@ class SelfCInvNet(nn.Module):
 			zero = torch.Tensor([0])
 			return LR,LR_FUCK,zero,zero,zero,zero,img_distri
 		else:
+			Seg_Len = 3
 			bt,c,h,w = out.size()
 			t = GlobalVar.get_Temporal_LEN()
 			b = bt//t
