@@ -56,7 +56,7 @@ def tensor_to_number(xs):
 		else:
 			l += [i.item()]
 	return l
-img_ext = ".jpg"
+img_ext = ".png"
 def avg_list(l):
 	if len(l) == 0:
 		return 0

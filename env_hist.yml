@@ -1,0 +1,15 @@
+name: selfc
+channels:
+  - defaults
+dependencies:
+  - pytorch
+  - torchaudio
+  - torchvision
+  - cudatoolkit=11.6
+  - matplotlib
+  - scipy
+  - sk-video
+  - ffmpeg=4.2.3
+  - protobuf
+  - tensorboard
+prefix: /home/himank/anaconda3/envs/selfc

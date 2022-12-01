@@ -15,13 +15,27 @@ datasets:
   #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_beauty/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
   #   video_len: 100
   #   batch_size: 1
-  test_1:  # the 1st test dataset
-    name: selfc_mm
+  # test_1:  # the 1st test dataset
+  #   name: selfc_mm
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm   # path to validation HR images
+  #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 40
+  #   batch_size: 1
+  test_2:  # the 1st test dataset
+    name: selfc_mm_rocks_big
     mode: LQGTVID
-    dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm   # path to validation HR images
-    dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
-    video_len: 40
+    dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm_rocks   # path to validation HR images
+    dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm_rocks/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    video_len: 3
     batch_size: 1
+  # test_3:  # the 1st test dataset
+  #   name: selfc_hyperrim_train
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_sdn_train   # path to validation HR images
+  #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_sdn_train/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 3
+  #   batch_size: 1
   # test_2:  # the 1st test dataset
   #   name: selfc_bosphorus
   #   mode: LQGTVID
@@ -80,11 +94,14 @@ network_G:
   h265_q: 9
   h265_keyint: -1
   h265_all_default: true 
-  fh_loss: l2
+  fh_loss: gmm
+  gmm_k: 5
   stp_hidden_c: 24 
   stp_denseblock_innerc: 12
+  half: True
 
 #### path
 path:
-  pretrain_model_G: ./pretrained_models/Selfc_compression_300000iter.pth
+  # pretrain_model_G: ./pretrained_models/100000_G.pth
+  pretrain_model_G: /media/himank/SSD/SelfC/experiments/exp_big/train_h265_suggrogate_big/models/220000_G.pth
   strict_load: true

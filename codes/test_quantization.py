@@ -14,6 +14,7 @@ from models.modules.Quantization_h265_rgb_stream import \
 
 def h265_compress(data, quantization_H265_Stream, Seg_Len = 5, frame_skip = True, device = torch.device('cpu')):
     input = data['GT']
+    T1 = time.time()
     b, c, bt, h, w = input.size()
     input_reshaped = input.permute(0, 2, 1, 3, 4)
     out_video, pad_num = seg_add_pad(input_reshaped, Seg_Len)
@@ -35,7 +36,10 @@ def h265_compress(data, quantization_H265_Stream, Seg_Len = 5, frame_skip = True
             quantization_H265_Stream.write_multi_frames(out)
     
     bpp = quantization_H265_Stream.close_writer()
-
+    T2 = time.time()
+    print('H265 down time %s ms' % ((T2 - T1)*1000))
+    T1 = time.time()
+    
     quantization_H265_Stream.open_reader()
     outs = []
     for seg_i in range(seg_num):
@@ -48,7 +52,9 @@ def h265_compress(data, quantization_H265_Stream, Seg_Len = 5, frame_skip = True
     out = seg_remove_pad(out,pad_num,Seg_Len)
 
     regenerate = out.reshape(-1, 3, h, w)
-    
+    T2 = time.time()
+    print('H265 up time %s ms' % ((T2 - T1)*1000))
+        
     GT = input_reshaped.squeeze()
 
     return regenerate, GT, bpp

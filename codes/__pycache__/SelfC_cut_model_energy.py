@@ -280,8 +280,8 @@ class SelfCModel(BaseModel):
         # gradient clipping
         if self.train_opt['gradient_clipping']:
             total_norm = nn.utils.clip_grad_norm_(self.netG.parameters(), self.train_opt['gradient_clipping'])
-            if total_norm > self.train_opt['gradient_clipping']:
-                print(("clipping gradient: {} with coef {}".format(total_norm, self.train_opt['gradient_clipping']/ total_norm)))
+            # if total_norm > self.train_opt['gradient_clipping']:
+            #     print(("clipping gradient: {} with coef {}".format(total_norm, self.train_opt['gradient_clipping']/ total_norm)))
         if self.train_opt['gradient_clipping']:
             total_norm = nn.utils.clip_grad_norm_(self.net_cut_g.parameters(), self.train_opt['gradient_clipping'])
             if total_norm > self.train_opt['gradient_clipping']:

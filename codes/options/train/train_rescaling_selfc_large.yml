@@ -16,10 +16,10 @@ gpu_ids: [0,1]
 
 datasets:
   train:
-    name: VIMEO90k
+    name: MMSEPT
     mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/vimeo_septuplet/sequences # path to training HR images
-    dataroot_list: /media/ps/SSD/tianyuan/vimeo_septuplet/sep_trainlist.txt # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /media/himank/SSD/selfc_data/mm_septuplet/sequences # path to training HR images
+    dataroot_list: /media/himank/SSD/selfc_data/mm_septuplet/train_list.txt # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
     video_len: 7
     use_shuffle: true
     n_workers: 2  # per GPU
@@ -30,33 +30,33 @@ datasets:
     color: RGB
 
   val1:
-    name: city
+    name: MMSEPT_VAL
     val_batch_size: 1
     mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/videoSR/city/ds_7_to_7_new # path to validation HR images
-    dataroot_list: /media/ps/SSD/tianyuan/videoSR/city/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /media/himank/SSD/selfc_data/mm_septuplet/sequences # path to validation HR images
+    dataroot_list: /media/himank/SSD/selfc_data/mm_septuplet/train_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
     video_len: 7
-  val2:
-    name: walk
-    val_batch_size: 1
-    mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/videoSR/walk/ds_7_to_7_new # path to validation HR images
-    dataroot_list: /media/ps/SSD/tianyuan/videoSR/walk/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
-    video_len: 7
-  val3:
-    name: calendar
-    val_batch_size: 1
-    mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/videoSR/calendar/ds_7_to_7_new # path to validation HR images
-    dataroot_list: /media/ps/SSD/tianyuan/videoSR/calendar/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
-    video_len: 7
-  val4:
-    name: foliage
-    val_batch_size: 1
-    mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/videoSR/foliage/ds_7_to_7_new # path to validation HR images
-    dataroot_list: /media/ps/SSD/tianyuan/videoSR/foliage/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
-    video_len: 7
+  # val2:
+  #   name: walk
+  #   val_batch_size: 1
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/ps/SSD/tianyuan/videoSR/walk/ds_7_to_7_new # path to validation HR images
+  #   dataroot_list: /media/ps/SSD/tianyuan/videoSR/walk/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 7
+  # val3:
+  #   name: calendar
+  #   val_batch_size: 1
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/ps/SSD/tianyuan/videoSR/calendar/ds_7_to_7_new # path to validation HR images
+  #   dataroot_list: /media/ps/SSD/tianyuan/videoSR/calendar/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 7
+  # val4:
+  #   name: foliage
+  #   val_batch_size: 1
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/ps/SSD/tianyuan/videoSR/foliage/ds_7_to_7_new # path to validation HR images
+  #   dataroot_list: /media/ps/SSD/tianyuan/videoSR/foliage/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 7
     
 
 #### network structures

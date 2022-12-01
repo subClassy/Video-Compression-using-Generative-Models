@@ -3,7 +3,7 @@
 
 
 # python -m torch.distributed.launch --nproc_per_node 2 --master_port 22637 train.py -opt ./options/train/train_compression.yml --launcher pytorch
-name: train_h265_suggrogate
+name: train_h265_suggrogate_big
 use_tb_logger: true
 model: SelfC_GMM_Codec
 distortion: sr_bd
@@ -17,12 +17,12 @@ datasets:
   train:
     name: VIMEO90k
     mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/vimeo_septuplet/sequences # path to training HR images
-    dataroot_list: /media/ps/SSD/tianyuan/vimeo_septuplet/sep_trainlist.txt # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /media/himank/SSD/selfc_data/mm_septuplet/sequences # path to training HR images
+    dataroot_list: /media/himank/SSD/selfc_data/mm_septuplet/train_list.txt # path to training reference LR images, not necessary, if not provided, LR images will be generated in dataloader
     video_len: 3
     use_shuffle: true
     n_workers: 2  # per GPU
-    batch_size: 12
+    batch_size: 6
     GT_size: 144
     use_flip: true
     use_rot: true
@@ -32,9 +32,16 @@ datasets:
     name: city
     val_batch_size: 1
     mode: LQGTVID
-    dataroot_GT: /media/ps/SSD/tianyuan/videoSR/city/ds_7_to_7_new # path to validation HR images
-    dataroot_list: /media/ps/SSD/tianyuan/videoSR/city/ds_7_to_7_new/testlist.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    dataroot_GT: /media/himank/SSD/selfc_data/mm_septuplet/sequences  # path to validation HR images
+    dataroot_list: /media/himank/SSD/selfc_data/mm_septuplet/train_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
     video_len: 3
+  # val1:  # the 1st test dataset
+  #   name: selfc_mm
+  #   mode: LQGTVID
+  #   dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm   # path to validation HR images
+  #   dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+  #   video_len: 40
+  #   val_batch_size: 1
 
 #### network structures
 
@@ -50,7 +57,8 @@ network_G:
   global_module: nonlocal
   stp_blk_num: 4
   
-  fh_loss: l2
+  fh_loss: gmm
+  gmm_k: 5
   h265_deart: False
   h265_q: 16
   lambda_corr: !!float 1e-5
@@ -62,15 +70,15 @@ network_G:
 #### path
 
 path:
-  pretrain_model_G: 
-  strict_load: 
-  resume_state: 
+  pretrain_model_G: ./pretrained_models/440000_G_new.pth
+  strict_load: False
+  # resume_state: /media/himank/SSD/SelfC/experiments/train_h265_suggrogate/training_state/240000.state
 
 
 #### training settings: learning rate scheme, loss
 
 train:
-  lr_G: !!float 1e-4
+  lr_G: !!float 5e-05
   beta1: 0.9
   beta2: 0.999
   niter: 1000000

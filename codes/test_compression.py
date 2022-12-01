@@ -75,12 +75,13 @@ for test_loader in test_loaders:
     
 
     for data in test_loader:
+        # data['GT'] = data['GT'][:, :, :, :, :2048]
         model.feed_data(data)
         img_path = data['GT_path'][0]
         name_stomic = img_path.split("/")
         # print(img_path)
         img_name = name_stomic[-3]+"_" + name_stomic[-2] + "_" + name_stomic[-1]
-        print(img_name)
+        # print(img_name)
 
 
         model.test()
@@ -116,19 +117,32 @@ for test_loader in test_loaders:
         
         # save images
         suffix = opt['suffix']
-
+        gap = 2
         if is_save_image:
+            name = name_stomic[-2]
             no_of_images = gt_h265.shape[0]
-            for img_no in range(no_of_images // 5):
+            for img_no in range(no_of_images // gap):
                 if suffix:
-                    save_img_path = osp.join(dataset_dir, img_name + suffix + f'_{img_no}.jpg')
+                    save_img_path_gt = osp.join(dataset_dir, name + suffix + f'{img_no}_gt.jpg')
+                    save_img_path_h265 = osp.join(dataset_dir, name + suffix + f'{img_no}_h265.jpg')
+                    save_img_path_selfc = osp.join(dataset_dir, name + suffix + f'{img_no}_selfc.jpg')
+                    save_img_path_selfc_lr = osp.join(dataset_dir, name + suffix + f'{img_no}_selfc_lr.jpg')
+                    # save_img_path_selfc = osp.join(dataset_dir, name + '.png')
                 else:
-                    save_img_path = osp.join(dataset_dir, img_name + f'_{img_no}.jpg')
-                gt = gt_h265[img_no*5]
-                h265_recon = regenerate_h265[img_no*5]
-                selfc_recon = regenerate_h265[img_no*5]
-                output = torch.stack([gt, selfc_recon, gt, h265_recon], 0)
-                util.save_img(util.tensor2img(output), save_img_path)
+                    save_img_path_gt = osp.join(dataset_dir, name + f'{img_no}_gt.jpg')
+                    save_img_path_h265 = osp.join(dataset_dir, name + f'{img_no}_h265.jpg')
+                    save_img_path_selfc = osp.join(dataset_dir, name + f'{img_no}_selfc.jpg')
+                    save_img_path_selfc_lr = osp.join(dataset_dir, name + f'{img_no}_selfc_lr.jpg')
+                    # save_img_path_selfc = osp.join(dataset_dir, name + '.png')
+                gt = gt_h265[img_no*gap]
+                h265_recon = regenerate_h265[img_no*gap]
+                selfc_recon = sr_img[img_no*gap]
+                selfc_lr = lr_img[img_no*gap]
+                # output = torch.stack([gt, selfc_recon, gt, h265_recon], 0)
+                util.save_img(util.tensor2img(gt), save_img_path_gt)
+                util.save_img(util.tensor2img(h265_recon), save_img_path_h265)
+                util.save_img(util.tensor2img(selfc_recon), save_img_path_selfc)
+                util.save_img(util.tensor2img(selfc_lr), save_img_path_selfc_lr)
 
         # if suffix:
         #     save_img_path = osp.join(dataset_dir, img_name + suffix + '.jpg')

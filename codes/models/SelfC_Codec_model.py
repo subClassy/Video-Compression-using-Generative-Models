@@ -51,7 +51,9 @@ class SelfCModel(BaseModel):
 		self.print_network()
 		self.load()
 		torch.cuda.memory_summary(device=self.device, abbreviated=False)
-
+		
+		self.isHalf = opt["network_G"]["half"]
+		
 		# self.Quantization = Quantization()
 		self.Reconstruction_back = ReconstructionLoss(losstype="l1")
 		if self.is_train:
@@ -101,7 +103,10 @@ class SelfCModel(BaseModel):
 			self.log_dict = OrderedDict()
 
 	def feed_data(self, data):
-		self.real_H = data['GT'].half()  # GT
+		if self.isHalf:
+			self.real_H = data['GT'].half()  # GT
+		else:
+			self.real_H = data['GT']  # GT
 		
 		if "LQ" in data:
 			self.ref_L = data['LQ']  # GT
@@ -109,7 +114,7 @@ class SelfCModel(BaseModel):
 			self.real_H = self.real_H.to(self.device)
 			# if "LQ" in data:
 			#     self.ref_L = self.ref_L.to(self.device)
-		print(self.real_H.size())
+		# print(self.real_H.size())
 		self.real_H = self.real_H.transpose(1,2).reshape(-1,3,self.real_H.size(3),self.real_H.size(4))
 		if "LQ" in data: 
 			self.ref_L = self.ref_L.transpose(1,2).reshape(-1,3,self.ref_L.size(3),self.ref_L.size(4))
@@ -117,9 +122,13 @@ class SelfCModel(BaseModel):
 			if self.opt["distortion"] == "pytorch_bicubic":
 				self.ref_L = F.upsample(self.real_H,scale_factor=(1/self.opt['scale'],1/self.opt['scale']),mode='area')
 			if self.opt["distortion"] == "sr_bd":
-				with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+				if self.isHalf:
+					with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+						self.ref_L = Guassian_downsample(self.real_H.transpose(0,1),scale=2).transpose(0,1)
+					self.ref_L = self.ref_L.half()
+				else:
 					self.ref_L = Guassian_downsample(self.real_H.transpose(0,1),scale=2).transpose(0,1)
-				self.ref_L = self.ref_L.half()
+
 	   
 	def gaussian_batch(self, dims):
 		return torch.randn(tuple(dims)).to(self.device)
@@ -155,15 +164,15 @@ class SelfCModel(BaseModel):
 
 		l_back_rec = self.loss_backward(self.real_H, LR_codec_recons)
 
-		loss = (l_forw_fit+l_back_rec+loss_c+mimick_loss) * self.train_opt["loss_multiplier"]
+		loss = (l_forw_fit+2*l_back_rec+loss_c+mimick_loss) * self.train_opt["loss_multiplier"]
 		# loss = (l_forw_fit+l_back_rec+loss_c+mimick_loss)*128*10
 		loss.backward()
 
 		# gradient clipping
 		if self.train_opt['gradient_clipping']:
 			total_norm = nn.utils.clip_grad_norm_(self.netG.parameters(), self.train_opt['gradient_clipping'])
-			if total_norm > self.train_opt['gradient_clipping']:
-				print(("clipping gradient: {} with coef {}".format(total_norm, self.train_opt['gradient_clipping']/ total_norm)))
+			# if total_norm > self.train_opt['gradient_clipping']:
+			# 	print(("clipping gradient: {} with coef {}".format(total_norm, self.train_opt['gradient_clipping']/ total_norm)))
 		self.optimizer_G.step()
 		self.optimizer_G.zero_grad()
 
@@ -294,6 +303,7 @@ class SelfCModel(BaseModel):
 		load_path_G = self.opt['path']['pretrain_model_G']
 		if load_path_G is not None:
 			logger.info('Loading model for G [{:s}] ...'.format(load_path_G))
+			logger.info(self.opt['path']['strict_load'])
 			self.load_network(load_path_G, self.netG, self.opt['path']['strict_load'])
 
 	def save(self, iter_label):

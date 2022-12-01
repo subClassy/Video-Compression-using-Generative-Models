@@ -3,6 +3,7 @@
 
 experiments/*
 codes/tmp/*
+tmp/*
 !experiments/pretrained_models
 experiments/pretrained_models/*
 # !experiments/pretrained_models/SRResNet_bicx4_in3nf64nb16.pth
