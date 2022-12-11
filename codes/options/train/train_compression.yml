@@ -70,7 +70,7 @@ network_G:
 #### path
 
 path:
-  pretrain_model_G: ./pretrained_models/440000_G_new.pth
+  pretrain_model_G: /media/himank/SSD/SelfC/experiments/exp_big/train_h265_suggrogate_big/models/220000_G.pth
   strict_load: False
   # resume_state: /media/himank/SSD/SelfC/experiments/train_h265_suggrogate/training_state/240000.state
 

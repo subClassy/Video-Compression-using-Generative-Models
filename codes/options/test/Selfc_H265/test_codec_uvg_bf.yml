@@ -23,7 +23,7 @@ datasets:
   #   video_len: 40
   #   batch_size: 1
   test_2:  # the 1st test dataset
-    name: selfc_mm_rocks_big
+    name: selfc_mm_rocks_big_tv
     mode: LQGTVID
     dataroot_GT: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm_rocks   # path to validation HR images
     dataroot_list: /media/himank/SSD/selfc_data/reorg_UVG/UVG_src/selfc_mm_rocks/test_list.txt  # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
@@ -103,5 +103,5 @@ network_G:
 #### path
 path:
   # pretrain_model_G: ./pretrained_models/100000_G.pth
-  pretrain_model_G: /media/himank/SSD/SelfC/experiments/exp_big/train_h265_suggrogate_big/models/220000_G.pth
+  pretrain_model_G: /media/himank/SSD/SelfC/experiments/train_tv_loss/train_h265_suggrogate_big/models/320000_G.pth
   strict_load: true

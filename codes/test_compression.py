@@ -142,7 +142,7 @@ for test_loader in test_loaders:
                 util.save_img(util.tensor2img(gt), save_img_path_gt)
                 util.save_img(util.tensor2img(h265_recon), save_img_path_h265)
                 util.save_img(util.tensor2img(selfc_recon), save_img_path_selfc)
-                util.save_img(util.tensor2img(selfc_lr), save_img_path_selfc_lr)
+                # util.save_img(util.tensor2img(selfc_lr), save_img_path_selfc_lr)
 
         # if suffix:
         #     save_img_path = osp.join(dataset_dir, img_name + suffix + '.jpg')

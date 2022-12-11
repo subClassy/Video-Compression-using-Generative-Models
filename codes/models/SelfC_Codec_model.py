@@ -142,9 +142,26 @@ class SelfCModel(BaseModel):
 		x_samples1 = self.netG(x=y, rev=True)
 		# x_samples_image = x_samples[:, :3, :, :]
 		l_back_rec1 = self.train_opt['lambda_rec_back'] * self.Reconstruction_back(x, x_samples1)
+		l_tv = self.tv_loss(torch.abs(x - x_samples1))
+
+		l_back_rec1 += l_tv
 		# l_back_rec2 = self.train_opt['lambda_rec_back'] * self.Reconstruction_back(x, x_samples2)
 
 		return l_back_rec1
+	
+	def tv_loss(self, x):
+		batch_size = x.size()[0]
+		h_x = x.size()[2]
+		w_x = x.size()[3]
+		count_h = self.tensor_size(x[:, :, 1:, :])
+		count_w = self.tensor_size(x[:, :, :, 1:])
+		h_tv = torch.pow((x[:, :, 1:, :] - x[:, :, :h_x - 1, :]), 2).sum()
+		w_tv = torch.pow((x[:, :, :, 1:] - x[:, :, :, :w_x - 1]), 2).sum()
+		return 2 * (h_tv / count_h + w_tv / count_w) / batch_size
+
+	@staticmethod
+	def tensor_size(t):
+		return t.size()[1] * t.size()[2] * t.size()[3]
 
 
 	def optimize_parameters(self, step):
