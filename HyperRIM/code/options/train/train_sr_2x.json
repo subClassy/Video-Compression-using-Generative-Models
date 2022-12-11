@@ -1,0 +1,64 @@
+{
+  "name": "HyperRIM_Train_SR_x2"
+  , "use_tb_logger": true
+  , "model":"hrim"
+  , "scale": 2
+  , "gpu_ids": [0]
+
+  , "datasets": {
+    "train": {
+      "name": "train"
+      , "mode": "LRHR"
+      , "dataroot_HR": "/media/himank/SSD/hyperrim_data/hf_npy"
+      , "dataroot_LR": "/media/himank/SSD/hyperrim_data/lf_npy"
+      , "subset_file": null
+      , "use_shuffle": true
+      , "use_flip": false
+      , "use_rot": false
+      , "n_workers": 8
+      , "batch_size_per_month": 320
+      , "batch_size_per_day": 1
+    }
+  }
+
+  , "path": {
+      "root": "/media/himank/SSD/HyperRIM/code"
+  , "pretrain_model_G": "/media/himank/SSD/HyperRIM/experiments/pretrained_models/mlp_weight_selfc.pth"
+
+  }
+
+  , "network_G": {
+    "which_model_G": "MLPnet"
+    , "in_nc": 24
+    , "out_nc": 12
+    , "code_nc" : 8
+  }
+
+  , "train": {
+    "lr_G": 1.25e-4
+    , "weight_decay_G": 0
+    , "beta1_G": 0.9
+    , "lr_scheme": "MultiStepLR"
+    , "lr_steps": [85000]
+    , "lr_gamma": 1.0
+
+    , "use_dci": true
+    , "inter_supervision": false
+    , "dci_num_comp_indices": 2
+    , "dci_num_simp_indices": 10
+
+    , "num_samples_per_img": 120
+    , "sample_perturbation_magnitude": 0
+    , "zero_code": false
+    , "num_months": 25
+    , "num_days": 1e4
+
+    , "manual_seed": 0
+    , "val_freq": 0
+  }
+
+  , "logger": {
+    "print_freq": 200
+    , "save_checkpoint_freq": 5e3
+  }
+}

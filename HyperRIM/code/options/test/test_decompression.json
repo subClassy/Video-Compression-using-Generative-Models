@@ -1,0 +1,34 @@
+{
+  "name": "HyperRIM_Test_Decompression"
+  , "use_tb_logger": true
+  , "model":"hrim"
+  , "scale": 2
+  , "gpu_ids": [0]
+  , "multiple": 10
+  , "datasets": {
+    "val": {
+      "name": "test"
+      , "mode": "LRHR"
+      , "dataroot_HR": "/media/himank/SSD/hyperrim_data/selfc_gt"
+      , "dataroot_LR": "/media/himank/SSD/hyperrim_data/selfc_recon"
+    }
+  }
+
+  , "path": {
+    "root": "/media/himank/SSD/HyperRIM/code"
+  , "pretrain_model_G": "/media/himank/SSD/HyperRIM/experiments/pretrained_models/HyperRIM_decompression.pth"
+  }
+
+  , "network_G": {
+    "which_model_G": "IMRRDB_net"
+    , "num_dense_channels": [64]
+    , "num_residual_channels": [64]
+    , "num_blocks": 6
+    , "in_nc": 3
+    , "out_nc": 3
+    , "code_nc" : 5
+    , "map_nc" : 128
+    , "latent_nc" : 512
+    , "no_upsample" : true
+  }
+}

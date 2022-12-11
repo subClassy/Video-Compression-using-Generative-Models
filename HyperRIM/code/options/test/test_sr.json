@@ -1,0 +1,32 @@
+{
+  "name": "HyperRIM_Test_SR_x16"
+  , "use_tb_logger": true
+  , "model":"hrim"
+  , "scale": 2
+  , "gpu_ids": [0]
+  , "multiple": 1
+  , "datasets": {
+    "val": {
+      "name": "test"
+      , "mode": "LR"
+      , "dataroot_LR": "/media/himank/SSD/hyperrim_data/selfc_mm_rocks_lr"
+    }
+  }
+
+  , "path": {
+    "root": "/media/himank/SSD/HyperRIM/code"
+  , "pretrain_model_G": "/media/himank/SSD/HyperRIM/experiments/pretrained_models/HyperRIM_x16_strawberry.pth"
+  }
+
+  , "network_G": {
+    "which_model_G": "IMRRDB_net"
+    , "num_dense_channels": [256, 192, 128, 64]
+    , "num_residual_channels": [128, 64, 64, 64]
+    , "num_blocks": 6
+    , "in_nc": 3
+    , "out_nc": 3
+    , "code_nc" : 5
+    , "map_nc" : 128
+    , "latent_nc" : 512
+  }
+}

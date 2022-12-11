@@ -1,0 +1,4 @@
+.vscode/*
+**/experiments/
+**/__pycache__
+**/results/

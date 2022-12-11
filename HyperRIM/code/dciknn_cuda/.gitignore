@@ -1,0 +1,4 @@
+**/build
+**/dist
+**/dciknn_cuda.egg-info
+**/__pycache__
