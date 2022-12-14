@@ -6,12 +6,13 @@ We designed a system to perform video compression and reconstruction to overcome
 ## Folder Structure
 
     .
-    ├── HSTVC                 # code for Hybrid Spatio Temporal Video Compression
-    ├── HyperRIM              # modified code for IMLE adapted from Generating Unobserved Realities
-    ├── codes                 # codes for SelfC, data pre-processing and data analysis
-    │   ├── models            # encoder and decoder modules for SelfC       
-    │   └── options           # train and test configs for SelfC
-    ├── env.yml               # anaconda environment file for SelfC
+    ├── HSTVC                                                   # code for Hybrid Spatio Temporal Video Compression
+    ├── HyperRIM                                                # modified code for IMLE adapted from Generating Unobserved Realities
+    ├── codes                                                   # codes for SelfC, data pre-processing and data analysis
+    │   ├── models                                              # encoder and decoder modules for SelfC       
+    │   └── options                                             # train and test configs for SelfC
+    ├── env.yml                                                 # anaconda environment file for SelfC
+    ├── Video_Compression_using_Generative_Models.pdf           # Report for the project    
     └── ...
 
 HSTVC and HyperRIM have their individual Readmes for their individual projects
